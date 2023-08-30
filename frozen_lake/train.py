@@ -66,7 +66,7 @@ def train():
     )
 
     # Evaluate our Agent
-    eval_seed = [42] * config.n_eval_episodes
+    eval_seed = []  # [42] * config.n_eval_episodes
     mean_reward, std_reward = evaluate_agent(
         env,
         config.max_steps,
