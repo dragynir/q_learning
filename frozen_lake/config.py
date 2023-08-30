@@ -10,7 +10,7 @@ class Config:
     render_mode: str = 'rgb_array'
 
     # Training parameters
-    n_training_episodes: int = 10000  # Total training episodes
+    n_training_episodes: int = 100000  # Total training episodes
     learning_rate: float = 0.7  # Learning rate
 
     # Evaluation parameters
