@@ -6,7 +6,7 @@ from typing import List
 class Config:
     env_name: str = 'FrozenLake-v1'
     map_name: str = '4x4'
-    is_slippery: bool = False
+    is_slippery: bool = True
     render_mode: str = 'rgb_array'
 
     # Training parameters

@@ -103,12 +103,13 @@ def evaluate_agent(env, max_steps, n_eval_episodes, Q, seed):
     return mean_reward, std_reward
 
 
-def record_video(env, Qtable, out_directory, fps=1):
+def record_video(env, Qtable, out_directory, max_steps, fps=1):
     """
     Generate a replay video of the agent
     :param env
     :param Qtable: Qtable of our agent
     :param out_directory
+    :param max_steps
     :param fps: how many frame per seconds (with taxi-v3 and frozenlake-v1 we use 1)
     """
     images = []
@@ -117,12 +118,27 @@ def record_video(env, Qtable, out_directory, fps=1):
     state, info = env.reset(seed=np.random.randint(0, 500))
     img = env.render()
     images.append(img)
-    while not terminated or truncated:
-        # Take the action (index) that have the maximum expected future reward given that state
-        action = np.argmax(Qtable[state][:])
-        state, reward, terminated, truncated, info = env.step(action) # We directly put next_state = state for recording logic
-        img = env.render()
-        images.append(img)
+    print('Recording video...')
+
+    steps = 0
+
+    with tqdm(total=max_steps) as pbar:
+
+        while not terminated or truncated:
+            # Take the action (index) that have the maximum expected future reward given that state
+            action = np.argmax(Qtable[state][:])
+            state, reward, terminated, truncated, info = env.step(action) # We directly put next_state = state for recording logic
+            img = env.render()
+            images.append(img)
+
+            if terminated or truncated:
+                break
+
+            steps += 1
+            pbar.update(1)
+            if steps == max_steps:
+                break
+
     imageio.mimsave(out_directory, [np.array(img) for i, img in enumerate(images)], fps=fps)
 
 

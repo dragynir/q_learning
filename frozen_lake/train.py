@@ -77,7 +77,9 @@ def train():
     print(f"Mean_reward={mean_reward:.2f} +/- {std_reward:.2f}")
 
     trained_video = './replays/trained.mp4'
-    record_video(env, Qtable_frozenlake, out_directory=trained_video, fps=1)
+    if os.path.exists(trained_video):
+        os.remove(trained_video)
+    record_video(env, Qtable_frozenlake, out_directory=trained_video, max_steps=config.max_steps, fps=1)
     show_video(trained_video)
 
 
