@@ -11,15 +11,10 @@ from tqdm.notebook import tqdm
 from frozen_lake.config import Config
 import matplotlib.pyplot as plt
 
-from frozen_lake.q_learning import initialize_q_table, train_qtable, evaluate_agent, record_video, show_video
+from frozen_lake.q_learning import initialize_q_table, train_qtable, evaluate_agent, record_video, show_video, \
+    show_env_example
 from gymnasium.envs.toy_text.frozen_lake import generate_random_map
 
-
-def show_env_example(env: Env):
-    env.reset()
-    plt.figure()
-    plt.imshow(env.render())
-    plt.show()
 
 
 def train():

@@ -23,6 +23,7 @@ def train():
     random map we will fail.
 
 
+
     Example to create a custom map
     desc = ['SFFF', 'FHFH', 'FFFH', 'HFFG']
     gym.make('FrozenLake-v1', desc=desc, is_slippery=True)
