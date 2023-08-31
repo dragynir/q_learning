@@ -3,6 +3,8 @@ from random import random
 
 import imageio
 import numpy as np
+from gym import Env
+from matplotlib import pyplot as plt
 from tqdm import tqdm
 import cv2
 
@@ -40,9 +42,11 @@ def train_qtable(env, Qtable, n_training_episodes, min_epsilon, max_epsilon, dec
         epsilon = min_epsilon + (max_epsilon - min_epsilon)*np.exp(-decay_rate*episode)
         # Reset the environment
         state, info = env.reset()
-        step = 0
+
         terminated = False
         truncated = False
+
+        # show_env_example(env)
 
         # repeat
         for step in range(max_steps):
@@ -79,6 +83,7 @@ def evaluate_agent(env, max_steps, n_eval_episodes, Q, seed):
             state, info = env.reset(seed=seed[episode])
         else:
             state, info = env.reset()
+
 
         step = 0
         truncated = False
@@ -157,3 +162,10 @@ def show_video(path: str, sleep_frame=1) -> None:
 
     cap.release()
     cv2.destroyAllWindows()  # destroy all opened windows
+
+
+def show_env_example(env: Env):
+    env.reset()
+    plt.figure()
+    plt.imshow(env.render())
+    plt.show()

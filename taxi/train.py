@@ -10,16 +10,9 @@ from tqdm.notebook import tqdm
 
 import matplotlib.pyplot as plt
 
-from taxi.q_learning import initialize_q_table, train_qtable, evaluate_agent, record_video, show_video
+from taxi.q_learning import initialize_q_table, train_qtable, evaluate_agent, record_video, show_video, show_env_example
 
 from taxi.config import Config
-
-
-def show_env_example(env: Env):
-    env.reset()
-    plt.figure()
-    plt.imshow(env.render())
-    plt.show()
 
 
 def train():
@@ -55,7 +48,7 @@ def train():
 
     print('_____TRAINING_____ \n')
 
-    Qtable_frozenlake = train_qtable(
+    Qtable = train_qtable(
         env,
         Qtable,
         config.n_training_episodes,
@@ -67,21 +60,19 @@ def train():
         config.learning_rate,
     )
 
-    # Evaluate our Agent
-    eval_seed = []  # [42] * config.n_eval_episodes
     mean_reward, std_reward = evaluate_agent(
         env,
         config.max_steps,
         config.n_eval_episodes,
-        Qtable_frozenlake,
-        eval_seed,
+        Qtable,
+        config.eval_seed,
     )
     print(f"Mean_reward={mean_reward:.2f} +/- {std_reward:.2f}")
 
     trained_video = './replays/trained.mp4'
     if os.path.exists(trained_video):
         os.remove(trained_video)
-    record_video(env, Qtable_frozenlake, out_directory=trained_video, max_steps=config.max_steps, fps=1)
+    record_video(env, Qtable, out_directory=trained_video, max_steps=config.max_steps, fps=1)
     show_video(trained_video)
 
 
