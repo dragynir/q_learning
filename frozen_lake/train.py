@@ -12,6 +12,7 @@ from frozen_lake.config import Config
 import matplotlib.pyplot as plt
 
 from frozen_lake.q_learning import initialize_q_table, train_qtable, evaluate_agent, record_video, show_video
+from gymnasium.envs.toy_text.frozen_lake import generate_random_map
 
 
 def show_env_example(env: Env):
@@ -23,7 +24,10 @@ def show_env_example(env: Env):
 
 def train():
     """
-    Main function for q-learning train
+    Main function for q-learning train.
+
+    Using q-table we overfiting the environment, so  in
+    random map we will fail.
 
 
     Example to create a custom map
@@ -36,6 +40,7 @@ def train():
         map_name=config.map_name,
         is_slippery=config.is_slippery,
         render_mode=config.render_mode,
+        desc=generate_random_map(size=4),
     )
 
     print('_____OBSERVATION SPACE_____ \n')
