@@ -73,6 +73,8 @@ def train_one_step(
     torch.nn.utils.clip_grad_value_(policy_net.parameters(), 100)
     optimizer.step()
 
+    return loss
+
 
 def train():
     config = Config()
@@ -137,7 +139,7 @@ def train():
 
             # Perform one step of the optimization (on the policy network)
             if len(memory) >= config.batch_size:
-                train_one_step(
+                loss = train_one_step(
                     memory,
                     policy_net,
                     target_net,
