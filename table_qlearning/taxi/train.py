@@ -1,20 +1,9 @@
-import numpy as np
 import gymnasium as gym
-import random
-import imageio
 import os
-import tqdm
 
-from gym import Env
-from tqdm.notebook import tqdm
+from table_qlearning.taxi.q_learning import initialize_q_table, train_qtable, evaluate_agent, record_video, show_video, show_env_example
 
-from frozen_lake.config import Config
-import matplotlib.pyplot as plt
-
-from frozen_lake.q_learning import initialize_q_table, train_qtable, evaluate_agent, record_video, show_video, \
-    show_env_example
-from gymnasium.envs.toy_text.frozen_lake import generate_random_map
-
+from table_qlearning.taxi.config import Config
 
 
 def train():
@@ -25,6 +14,7 @@ def train():
     random map we will fail.
 
 
+
     Example to create a custom map
     desc = ['SFFF', 'FHFH', 'FFFH', 'HFFG']
     gym.make('FrozenLake-v1', desc=desc, is_slippery=True)
@@ -32,10 +22,7 @@ def train():
     config = Config()
     env = gym.make(
         config.env_name,
-        map_name=config.map_name,
-        is_slippery=config.is_slippery,
         render_mode=config.render_mode,
-        desc=generate_random_map(size=4),
     )
 
     print('_____OBSERVATION SPACE_____ \n')
@@ -49,13 +36,13 @@ def train():
     action_space = env.action_space.n
     print('There are ', action_space, ' possible actions')
 
-    Qtable_frozenlake = initialize_q_table(state_space, action_space)
+    Qtable = initialize_q_table(state_space, action_space)
 
     print('_____TRAINING_____ \n')
 
-    Qtable_frozenlake = train_qtable(
+    Qtable = train_qtable(
         env,
-        Qtable_frozenlake,
+        Qtable,
         config.n_training_episodes,
         config.min_epsilon,
         config.max_epsilon,
@@ -65,21 +52,19 @@ def train():
         config.learning_rate,
     )
 
-    # Evaluate our Agent
-    eval_seed = []  # [42] * config.n_eval_episodes
     mean_reward, std_reward = evaluate_agent(
         env,
         config.max_steps,
         config.n_eval_episodes,
-        Qtable_frozenlake,
-        eval_seed,
+        Qtable,
+        config.eval_seed,
     )
     print(f"Mean_reward={mean_reward:.2f} +/- {std_reward:.2f}")
 
     trained_video = './replays/trained.mp4'
     if os.path.exists(trained_video):
         os.remove(trained_video)
-    record_video(env, Qtable_frozenlake, out_directory=trained_video, max_steps=config.max_steps, fps=1)
+    record_video(env, Qtable, out_directory=trained_video, max_steps=config.max_steps, fps=1)
     show_video(trained_video)
 
 
