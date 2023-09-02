@@ -47,10 +47,10 @@ class ActionSelector:
         self,
         env: Env,
         policy_net: nn.Module,
-        device: torch.device,
         eps_start: float = 0.95,
         eps_end: float = 0.05,
         eps_decay: int = 1000,
+        device: torch.device = torch.device('cpu'),
     ) -> None:
         self.device = device
         self.env = env
@@ -58,17 +58,22 @@ class ActionSelector:
         self.eps_start = eps_start
         self.eps_end = eps_end
         self.eps_decay = eps_decay
+        self.steps_done = 0
 
-    def select_action(self, state: torch.Tensor, steps_done: int) -> torch.Tensor:
+    def epsilon_on_step(self, steps_done: int):
+        """Returns exploration vs exploitation epsilon threshold."""
+        return self.eps_end + (self.eps_start - self.eps_end) * \
+                                math.exp(-1. * steps_done / self.eps_decay)
+
+    def select_action(self, state: torch.Tensor) -> torch.Tensor:
         """Select an action using epsilon-greedy strategy.
 
         :param state: current environment state
         :param steps_done: number of steps done
         """
         sample = random.random()
-        eps_threshold_on_step = self.eps_end + (self.eps_start - self.eps_end) * \
-                        math.exp(-1. * steps_done / self.eps_decay)  # TODO изобразить графиг до запуска
-        steps_done += 1
+        eps_threshold_on_step = self.epsilon_on_step(self.steps_done)
+        self.steps_done += 1
 
         if sample > eps_threshold_on_step:
             # exploitation strategy (use neural net to sample action)

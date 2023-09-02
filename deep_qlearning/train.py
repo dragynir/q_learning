@@ -99,21 +99,20 @@ def train():
     action_selector = ActionSelector(
         env,
         policy_net,
-        device,
         config.eps_start,
         config.eps_end,
         config.eps_decay,
+        device,
     )
     # Compute Huber loss https://pytorch.org/docs/stable/generated/torch.nn.SmoothL1Loss.html
     criterion = nn.SmoothL1Loss()
 
-    steps_done: int = 0
     for i_episode in tqdm(range(config.num_episodes), total=config.num_episodes):
         # Initialize the environment and get it's state
         state, info = env.reset()
         state = torch.tensor(state, dtype=torch.float32, device=device).unsqueeze(0)
         for t in count():
-            action = action_selector.select_action(state, steps_done)
+            action = action_selector.select_action(state)
             observation, reward, terminated, truncated, _ = env.step(action.item())
             reward = torch.tensor([reward], device=device)
             done = terminated or truncated
