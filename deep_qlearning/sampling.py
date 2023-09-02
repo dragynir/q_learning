@@ -67,7 +67,7 @@ class ActionSelector:
         """
         sample = random.random()
         eps_threshold_on_step = self.eps_end + (self.eps_start - self.eps_end) * \
-                        math.exp(-1. * steps_done / self.eps_decay)
+                        math.exp(-1. * steps_done / self.eps_decay)  # TODO изобразить графиг до запуска
         steps_done += 1
 
         if sample > eps_threshold_on_step:
@@ -76,4 +76,4 @@ class ActionSelector:
                 return self.policy_net(state).max(1)[1].view(1, 1)
 
         # exploration strategy (sample random action)
-        return torch.tensor([[self.env.action_space.sample()]], device=state.get_device(), dtype=torch.long)
+        return torch.tensor([[self.env.action_space.sample()]], device=self.device, dtype=torch.long)

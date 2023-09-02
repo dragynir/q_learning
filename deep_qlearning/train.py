@@ -52,7 +52,7 @@ def train_one_step(
 
     # Compute V(s_{t+1}) for all next states.
     # Expected values of actions for non_final_next_states are computed based
-    # on the "older" target_net; selecting their best reward with max(1)[0].
+    # on the 'older' target_net; selecting their best reward with max(1)[0].
     # This is merged based on the mask, such that we'll have either the expected
     # state value or 0 in case the state was final.
     next_state_values = torch.zeros(batch_size, device=device)
@@ -76,8 +76,8 @@ def train_one_step(
 def train():
     config = Config()
 
-    env = gym.make("CartPole-v1")
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    env = gym.make(config.env_name)
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # Get the number of state observations and number of actions
     state, info = env.reset()
@@ -104,7 +104,7 @@ def train():
         config.eps_end,
         config.eps_decay,
     )
-    # Compute Huber loss
+    # Compute Huber loss https://pytorch.org/docs/stable/generated/torch.nn.SmoothL1Loss.html
     criterion = nn.SmoothL1Loss()
 
     steps_done: int = 0
