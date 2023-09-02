@@ -1,7 +1,7 @@
 import math
 from collections import namedtuple, deque
 import random
-from typing import List
+from typing import List, Tuple
 
 import torch
 from gym import Env
@@ -64,6 +64,12 @@ class ActionSelector:
         """Returns exploration vs exploitation epsilon threshold."""
         return self.eps_end + (self.eps_start - self.eps_end) * \
                                 math.exp(-1. * steps_done / self.eps_decay)
+
+    def get_info(self, max_steps: int) -> Tuple[List[float], List[float]]:
+        """Returns all possible steps and epsilon values."""
+        steps = [i for i in range(max_steps * 10)]
+        eps = [self.epsilon_on_step(i) for i in steps]
+        return steps, eps
 
     def select_action(self, state: torch.Tensor) -> torch.Tensor:
         """Select an action using epsilon-greedy strategy.

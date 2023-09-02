@@ -15,6 +15,7 @@ from tqdm import tqdm
 from deep_qlearning.config import Config
 from deep_qlearning.model import DQN
 from deep_qlearning.sampling import ReplayMemory, ActionSelector, Transition
+from deep_qlearning.visualization import plot_values
 
 
 def train_one_step(
@@ -103,6 +104,12 @@ def train():
         config.eps_end,
         config.eps_decay,
         device,
+    )
+    plot_values(
+        *action_selector.get_info(config.eps_decay),
+        title='Epsilon on step (Exploration vs Exploitation)',
+        xlabel='step',
+        ylabel='epsilon',
     )
     # Compute Huber loss https://pytorch.org/docs/stable/generated/torch.nn.SmoothL1Loss.html
     criterion = nn.SmoothL1Loss()
