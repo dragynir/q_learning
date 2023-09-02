@@ -164,4 +164,10 @@ def train():
 
 
 if __name__ == '__main__':
+    # TODO install pytorch-gpu to env
+    # TODO debug environment
+    # TODO visualize and evaluate environment
+    # TODO log metrics to wandb
+    # TODO train cart environment
+    # TODO test on new environments
     train()
