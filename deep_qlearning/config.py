@@ -7,6 +7,7 @@ class Config:
     env_name: str = "CartPole-v1"
     batch_size: int = 128
     replay_memory_capacity: int = 10000
+    num_episodes: int = 600
 
     gamma: float = 0.99
     eps_start = 0.9  # for epsilon gready strategy
