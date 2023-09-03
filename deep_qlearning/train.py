@@ -118,6 +118,7 @@ def train():
     # Compute Huber loss https://pytorch.org/docs/stable/generated/torch.nn.SmoothL1Loss.html
     criterion = nn.SmoothL1Loss()
 
+    print('Training..')
     for i_episode in tqdm(range(config.num_episodes), total=config.num_episodes):
         # Initialize the environment and get it's state
         state, info = env.reset()
@@ -164,14 +165,14 @@ def train():
             if done:
                 break
 
-    evaluate_agent(env, policy_net, config.max_eval_steps, config.n_eval_episodes)
+    evaluate_agent(env, policy_net, config.max_eval_steps, config.n_eval_episodes, device)
 
 
 if __name__ == '__main__':
     # TODO install pytorch-gpu to env: done
     # TODO debug environment: done
 
-    # TODO visualize and evaluate environment
+    # TODO visualize and evaluate environment (track episodes with bad and good results)
     # TODO log metrics to wandb
     # TODO train cart environment
     # TODO test on new environments
