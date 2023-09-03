@@ -83,7 +83,9 @@ def train_one_step(
 def train():
     config = Config()
 
-    env = gym.make(config.env_name)
+    env = gym.make(config.env_name, render_mode=config.render_mode)
+    env.reset()
+    env.render()
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # Get the number of state observations and number of actions

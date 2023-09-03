@@ -8,6 +8,7 @@ class Config:
     https://gymnasium.farama.org/environments/classic_control/cart_pole/
     """
     env_name: str = "CartPole-v1"
+    render_mode: str = 'rgb_array'
     batch_size: int = 128
     replay_memory_capacity: int = 10000
     num_episodes: int = 600
