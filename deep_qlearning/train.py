@@ -13,6 +13,7 @@ import torch.nn.functional as F
 from tqdm import tqdm
 
 from deep_qlearning.config import Config
+from deep_qlearning.evaluate import evaluate_agent
 from deep_qlearning.model import DQN
 from deep_qlearning.sampling import ReplayMemory, ActionSelector, Transition
 from deep_qlearning.visualization import plot_values
@@ -162,6 +163,8 @@ def train():
 
             if done:
                 break
+
+    evaluate_agent(env, policy_net, config.max_eval_steps, config.n_eval_episodes)
 
 
 if __name__ == '__main__':
