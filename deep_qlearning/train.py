@@ -59,6 +59,7 @@ def train_one_step(
     next_state_values = torch.zeros(batch_size, device=device)
     with torch.no_grad():
         # perform greedy-policy with max to select action (off-policy)
+        # our expected reward on next state
         next_state_values[non_final_mask] = target_net(non_final_next_states).max(1)[0]
 
     # Compute the expected Q values
@@ -164,8 +165,9 @@ def train():
 
 
 if __name__ == '__main__':
-    # TODO install pytorch-gpu to env
-    # TODO debug environment
+    # TODO install pytorch-gpu to env: done
+    # TODO debug environment: done
+
     # TODO visualize and evaluate environment
     # TODO log metrics to wandb
     # TODO train cart environment
