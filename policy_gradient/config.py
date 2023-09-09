@@ -22,4 +22,4 @@ pixelcopter_hyperparameters = {
     "env_id": "Pixelcopter-PLE-v0",
 }
 
-train_config = cartpole_hyperparameters
+train_config = pixelcopter_hyperparameters

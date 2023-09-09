@@ -130,10 +130,7 @@ def train():
     print(device)
 
     # Create the env
-    env = gym.make(train_config, render_mode=train_config.render_mode)
-
-    # Create the evaluation env
-    eval_env = gym.make(train_config.env_id)
+    env = gym.make(train_config["env_id"], render_mode=train_config["render_mode"])
 
     # Get the state space and action space
     s_size = env.observation_space.shape[0]
@@ -168,13 +165,16 @@ def train():
         device,
     )
 
-    episodes = evaluate_agent(env, cartpole_policy, train_config["max_t"],  train_config["n_evaluation_episodes"], device)
+    # Create the evaluation env
+    eval_env = gym.make(train_config["env_id"], render_mode=train_config["render_mode"])
+    episodes = evaluate_agent(eval_env, cartpole_policy, train_config["max_t"],  train_config["n_evaluation_episodes"], device)
 
-    video_save_path = './replays/trained.mp4'
+    video_save_path = './replays/trained_copter.mp4'
     if os.path.exists(video_save_path):
         os.remove(video_save_path)
-    show_episode(env, episodes[0], train_config["max_t"], video_save_path, fps=1)
+    show_episode(eval_env, episodes[0], train_config["max_t"], video_save_path, fps=1)
 
 
+# TODO create new repository for this code
 if __name__ == '__main__':
     train()
