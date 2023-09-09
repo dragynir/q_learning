@@ -182,7 +182,7 @@ if __name__ == '__main__':
     # TODO debug environment: done
     # TODO visualize and evaluate environment (track episodes with bad and good results)
 
-    # TODO show bad examples
+    # TODO show bad examples, found best metric value for environment (upper bound)
     # TODO log metrics to wandb
     # TODO train cart environment
     # TODO test on new environments
