@@ -7,8 +7,6 @@ import torch
 import numpy as np
 
 import gym
-import roboschool
-
 from models import PPO
 
 
@@ -17,9 +15,9 @@ def train():
     print("============================================================================================")
 
     ####### initialize environment hyperparameters ######
-    env_name = "RoboschoolWalker2d-v1"
+    env_name = "CartPole-v1"  # "LunarLander-v2"
 
-    has_continuous_action_space = True  # continuous action space; else discrete
+    has_continuous_action_space = False  # continuous action space; else discrete
 
     max_ep_len = 1000  # max timesteps in one episode
     max_training_timesteps = int(3e6)  # break training loop if timeteps > max_training_timesteps
@@ -37,7 +35,7 @@ def train():
     ## Note : print/log frequencies should be > than max_ep_len
 
     ################ PPO hyperparameters ################
-    update_timestep = max_ep_len * 4  # update policy every n timesteps
+    update_timestep = max_ep_len * 4  # update policy every n timesteps, how long we collect observations
     K_epochs = 80  # update policy for K epochs in one PPO update
 
     eps_clip = 0.2  # clip parameter for PPO
@@ -167,14 +165,15 @@ def train():
     # training loop
     while time_step <= max_training_timesteps:
 
-        state = env.reset()
+        state, info = env.reset()
         current_ep_reward = 0
 
+        # Начало очередного эпизода
         for t in range(1, max_ep_len + 1):
 
             # select action with policy
             action = ppo_agent.select_action(state)
-            state, reward, done, _ = env.step(action)
+            state, reward, done, truncated, _ = env.step(action)
 
             # saving reward and is_terminals
             ppo_agent.buffer.rewards.append(reward)
